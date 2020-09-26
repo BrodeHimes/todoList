@@ -19,8 +19,7 @@
           display:none;
       }
 
-      .editInputClass{
-
+      #edit{
 
       }
   </style>
@@ -61,22 +60,23 @@
         noItemsMessage.setAttribute('class', 'hidden');
         let itemToAdd = inputBox.value;
         let todoListItem = document.createElement("LI");
-        todoListItem.innerHTML = itemToAdd+"<form><button type='button' class='edit'>Edit</button><button type='button'class='delete'>Delete</button></form> ";
+        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         inputBox.value="";
 
-        let listItem = document.querySelector('li');
 
 
 // Edit event handler
-        let edit = document.getElementsByClassName('edit');
+        let edit = document.getElementById('edit');
         let editItem = ()=>{
            todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>"
-           let editInput=document.getElementsByClassName('editInputClass');
+           let editInput=document.getElementById('editInput');
 
 //Enter key event handler
-    
-           editInput[0].addEventListener('keyup',function(e){
+            
+          
+            
+           editInput.addEventListener('keyup',function(e){
             let editInputValue=editInput.value;
              if (e.keyCode === 13) {
              console.log(editInputValue);
@@ -86,7 +86,7 @@
 
         }
 
-        edit[0].addEventListener('click',editItem);
+        edit.addEventListener('click',editItem);
 
 
     }
