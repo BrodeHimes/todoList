@@ -18,6 +18,11 @@
       .hidden {
           display:none;
       }
+
+      .editInputClass{
+
+
+      }
   </style>
 </head>
 
@@ -29,7 +34,7 @@
 <main> 
     <form> 
         <label for="inputBox" ></label>
-        <input type="text" id="inputBox" name="inputBox" autocomplete="off"></input>
+        <input type="text" id="inputBox" name="inputBox" autocomplete="off">
         <button type="button" id="create">Create</button>
         <button type="button" id="clear">Clear</button>
         <button type="button" id="deleteAll">Delete All</button>
@@ -51,15 +56,39 @@
     let todoListContainer= document.getElementById('todoListContainer');
 
 
-
 //Create event handler
     let addTodoItem = ()=>{ 
         noItemsMessage.setAttribute('class', 'hidden');
         let itemToAdd = inputBox.value;
         let todoListItem = document.createElement("LI");
-        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
+        todoListItem.innerHTML = itemToAdd+"<form><button type='button' class='edit'>Edit</button><button type='button'class='delete'>Delete</button></form> ";
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         inputBox.value="";
+
+        let listItem = document.querySelector('li');
+
+
+// Edit event handler
+        let edit = document.getElementsByClassName('edit');
+        let editItem = ()=>{
+           todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>"
+           let editInput=document.getElementsByClassName('editInputClass');
+
+//Enter key event handler
+    
+           editInput[0].addEventListener('keyup',function(e){
+            let editInputValue=editInput.value;
+             if (e.keyCode === 13) {
+             console.log(editInputValue);
+            }
+           }
+           );
+
+        }
+
+        edit[0].addEventListener('click',editItem);
+
+
     }
     create.addEventListener("click",addTodoItem);
 
@@ -76,6 +105,11 @@
     }
 
     deleteAll.addEventListener('click',deleteAllItems)
+
+
+    
+
+
 </script>
   
 </body>
