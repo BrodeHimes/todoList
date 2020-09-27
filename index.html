@@ -63,16 +63,22 @@
         todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         inputBox.value="";
-        let editClass=document.getElementsByClassName('editClass');
+        let editButtonClass=document.getElementsByClassName('editClass');
+
+        editButtonClicked(editButtonClass,todoListItem);
+        
+    };
 
 
-        for(let i=0; i<editClass.length;i++){
+
+    let editButtonClicked=(classToLoop,elementToTurnInput)=>{
+               for(let i=0; i<classToLoop.length;i++){
                 let editItemFunction = ()=>{
-                   todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>";
+                   elementToTurnInput.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>";
                 }
-                editClass[i].addEventListener('click',editItemFunction);
+                classToLoop[i].addEventListener('click',editItemFunction);
                   }
-               };
+    }
 
 
 
