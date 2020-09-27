@@ -60,36 +60,42 @@
         noItemsMessage.setAttribute('class', 'hidden');
         let itemToAdd = inputBox.value;
         let todoListItem = document.createElement("LI");
-        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
+        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         inputBox.value="";
+        let editClass=document.getElementsByClassName('editClass');
+
+
+        for(let i=0; i<editClass.length;i++){
+                let editItemFunction = ()=>{
+                   todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>";
+                }
+                editClass[i].addEventListener('click',editItemFunction);
+                  }
+               };
 
 
 
-// Edit event handler
-        let edit = document.getElementById('edit');
-        let editItem = ()=>{
-           todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>"
-           let editInput=document.getElementById('editInput');
+// // Edit event handler
+//         let edit = document.getElementById('edit');
+//         let editItem = ()=>{
+//            todoListItem.innerHTML="<label for='editInput'></label><input type=text id='editInput' class='editInputClass'>";
+//         let editInputClass=documet.getElementById('editInputClass');
+//         }
+
 
 //Enter key event handler
-            
-          
-            
-           editInput.addEventListener('keyup',function(e){
-            let editInputValue=editInput.value;
-             if (e.keyCode === 13) {
-             console.log(editInputValue);
-            }
-           }
-           );
+            // for(let i=0; i<editInputClass.length;i++){
+            //     editInputClass[i].addEventListener('keyup',function(e){
+            //      let editInputValue=editInput.value;
+            //      if (e.keyCode === 13) {
+            //      console.log(editInputValue);
+            //       }
+            //      }
+            //     )
+            //    }
+        
 
-        }
-
-        edit.addEventListener('click',editItem);
-
-
-    }
     create.addEventListener("click",addTodoItem);
 
 //Clear event handler
@@ -104,11 +110,7 @@
         noItemsMessage.removeAttribute('class', 'hidden'); 
     }
 
-    deleteAll.addEventListener('click',deleteAllItems)
-
-
-    
-
+    deleteAll.addEventListener('click',deleteAllItems);
 
 </script>
   
