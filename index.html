@@ -22,6 +22,10 @@
       #edit{
 
       }
+
+      .inputBoxClass{
+          width: 100%;
+      }
   </style>
 </head>
 
@@ -79,11 +83,13 @@
     let editButtonClicked=(classToLoop,elementToPopulateInput)=>{
         let populateInput = function(e){
             //makes it so that ONLY the edit button clicked will turn to input
-            e.target.innerHTML="<label for='inputBox'></label><input type=text id='inputBox' class='inputBoxClass'>";
+            let listItemNowInput=e.target.parentNode.parentNode;
+            listItemNowInput.innerHTML="<label for='inputBox'></label><input type=text id='inputBox' class='inputBoxClass'>";
+
 
             //calling enter click event handler
             let inputBoxClass=document.getElementsByClassName('inputBoxClass');
-            enterInputClicked(inputBoxClass);
+            enterInputClicked(inputBoxClass,listItemNowInput);
          }
 
         for(let i=0; i<classToLoop.length;i++){
@@ -91,13 +97,13 @@
         }
     }
 
-    let enterInputClicked=(classToLoop)=>{
+
+    let enterInputClicked=(classToLoop,todoListItemToEdit)=>{
         for(let i=0; i<classToLoop.length;i++){
           classToLoop[i].addEventListener('keyup',function(e){
             let inputValue=e.target.value;
             if (e.keyCode === 13) {
-              console.log(inputValue);
-              //seems to log item many times, may need to edit when put in todoListItemToEdit
+              todoListItemToEdit.innerHTML='<li>'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form></li>";
             }
           })
         }
