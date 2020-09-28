@@ -59,14 +59,14 @@
     let todoListContainer= document.getElementById('todoListContainer');
 
 
-//Create event handler
+//Create Event Handler
     let addTodoItem = ()=>{ 
         noItemsMessage.setAttribute('class', 'hidden');
 
         let itemToAdd = inputBox.value;
         let todoListItem = document.createElement("LI");
         todoListItem.setAttribute('class','todoListItemClass');
-        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
+        todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form> ";
        
 
         todoList.insertAdjacentElement('afterbegin',todoListItem);
@@ -77,14 +77,17 @@
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
         let editButtonClass=document.getElementsByClassName('editClass');
         editButtonClicked(editButtonClass);
+
+        //calling delete button event handler
+        let deleteButtonClass=document.getElementsByClassName('deleteClass');
+        deleteButtonClicked(deleteButtonClass);
         
     };
 
-
+//Edit Button Event handler
     let editButtonClicked=(classToLoop)=>{
         let populateInput = function(e){
             //makes it so that ONLY the edit button clicked will turn to input
-
             let listItemNowInput=e.target.parentNode.parentNode;
             let originalListElement=listItemNowInput.outerHTML;
             
@@ -98,42 +101,69 @@
 
         for(let i=0; i<classToLoop.length;i++){
          classToLoop[i].addEventListener('click',populateInput);
-
         }
 
     };
 
-// Input box event listeners (enter, esc, focusout)
+// Input box event handlers (enter, esc, focusout)
     let enterInputClicked=(classToLoop,todoListItemToEdit,originalTodoItem)=>{
         for(let i=0; i<classToLoop.length;i++){
           classToLoop[i].addEventListener('keyup',function(e){
             let inputValue=e.target.value;
             if (e.keyCode === 13) {
-              todoListItemToEdit.outerHTML='<li class="todoListItemClass">'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form></li>";
+              todoListItemToEdit.outerHTML='<li class="todoListItemClass">'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form></li>";
+
               let editButtonClass=document.getElementsByClassName('editClass');
               editButtonClicked(editButtonClass,todoListItemToEdit);
+              let deleteButtonClass=document.getElementsByClassName('deleteClass');
+              deleteButtonClicked(deleteButtonClass);
+
               } else if (e.keyCode===27){
                 todoListItemToEdit.innerHTML=originalTodoItem;
+
                 let editButtonClass=document.getElementsByClassName('editClass');
                 editButtonClicked(editButtonClass,todoListItemToEdit);
+                let deleteButtonClass=document.getElementsByClassName('deleteClass');
+                deleteButtonClicked(deleteButtonClass);
               } 
           });
           classToLoop[i].addEventListener('focusout', function(){
             todoListItemToEdit.innerHTML=originalTodoItem;
+
             let editButtonClass=document.getElementsByClassName('editClass');
             editButtonClicked(editButtonClass,todoListItemToEdit);
+            let deleteButtonClass=document.getElementsByClassName('deleteClass');
+            deleteButtonClicked(deleteButtonClass);
+
 
          });
        }
    };
     
+  let deleteButtonClicked = (classToLoop)=>{
+    let deleteListItem = function(e){
+      e.target.parentNode.parentNode.remove();
+    };
+
+    for(let i=0; i<classToLoop.length;i++){
+    classToLoop[i].addEventListener('click',deleteListItem);
+    }
 
 
-    
+  }
 
- 
 
-    create.addEventListener("click",addTodoItem);
+
+
+
+
+
+
+
+
+
+
+create.addEventListener("click",addTodoItem);
 
 //Clear event handler
     let clearInput = ()=>{
