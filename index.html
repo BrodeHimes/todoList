@@ -67,29 +67,33 @@
         let todoListItem = document.createElement("LI");
         todoListItem.setAttribute('class','todoListItemClass');
         todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form> ";
+       
+
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         
         inputBox.value="";
 
         //calling edit button event handler
-        // let todoListItemClass=document.getElementsByClassName('todoListItemClass');
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
         let editButtonClass=document.getElementsByClassName('editClass');
-        editButtonClicked(editButtonClass,todoListItem);
+        editButtonClicked(editButtonClass);
         
     };
 
 
-    let editButtonClicked=(classToLoop,elementToPopulateInput)=>{
+    let editButtonClicked=(classToLoop)=>{
         let populateInput = function(e){
             //makes it so that ONLY the edit button clicked will turn to input
-            let listItemNowInput=e.target.parentNode.parentNode;
-            listItemNowInput.innerHTML="<label for='inputBox'></label><input type=text id='inputBox' class='inputBoxClass'>";
 
+            let listItemNowInput=e.target.parentNode.parentNode;
+            let originalListElement=listItemNowInput.outerHTML;
+            
+            listItemNowInput.innerHTML="<label for='inputBox'></label><input type=text id='inputBox' class='inputBoxClass'>";
+            console.log(originalListElement);
 
             //calling enter click event handler
             let inputBoxClass=document.getElementsByClassName('inputBoxClass');
-            enterInputClicked(inputBoxClass,listItemNowInput);
+            enterInputClicked(inputBoxClass,listItemNowInput,originalListElement);
          }
 
         for(let i=0; i<classToLoop.length;i++){
@@ -98,19 +102,24 @@
     }
 
 
-    let enterInputClicked=(classToLoop,todoListItemToEdit)=>{
+    let enterInputClicked=(classToLoop,todoListItemToEdit,originalTodoItem)=>{
         for(let i=0; i<classToLoop.length;i++){
           classToLoop[i].addEventListener('keyup',function(e){
             let inputValue=e.target.value;
             if (e.keyCode === 13) {
-              todoListItemToEdit.innerHTML='<li>'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form></li>";
+              todoListItemToEdit.outerHTML='<li class="todoListItemClass">'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form></li>";
+              let editButtonClass=document.getElementsByClassName('editClass');
+              editButtonClicked(editButtonClass,todoListItemToEdit);
+            } else if (e.keyCode===27){
+              todoListItemToEdit.innerHTML=originalTodoItem;
               let editButtonClass=document.getElementsByClassName('editClass');
               editButtonClicked(editButtonClass,todoListItemToEdit);
             }
           })
         }
     }
-
+    
+    
 
  
 
