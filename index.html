@@ -98,10 +98,12 @@
 
         for(let i=0; i<classToLoop.length;i++){
          classToLoop[i].addEventListener('click',populateInput);
+
         }
-    }
 
+    };
 
+// Input box event listeners (enter, esc, focusout)
     let enterInputClicked=(classToLoop,todoListItemToEdit,originalTodoItem)=>{
         for(let i=0; i<classToLoop.length;i++){
           classToLoop[i].addEventListener('keyup',function(e){
@@ -110,15 +112,23 @@
               todoListItemToEdit.outerHTML='<li class="todoListItemClass">'+inputValue+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete'>Delete</button></form></li>";
               let editButtonClass=document.getElementsByClassName('editClass');
               editButtonClicked(editButtonClass,todoListItemToEdit);
-            } else if (e.keyCode===27){
-              todoListItemToEdit.innerHTML=originalTodoItem;
-              let editButtonClass=document.getElementsByClassName('editClass');
-              editButtonClicked(editButtonClass,todoListItemToEdit);
-            }
-          })
-        }
-    }
+              } else if (e.keyCode===27){
+                todoListItemToEdit.innerHTML=originalTodoItem;
+                let editButtonClass=document.getElementsByClassName('editClass');
+                editButtonClicked(editButtonClass,todoListItemToEdit);
+              } 
+          });
+          classToLoop[i].addEventListener('focusout', function(){
+            todoListItemToEdit.innerHTML=originalTodoItem;
+            let editButtonClass=document.getElementsByClassName('editClass');
+            editButtonClicked(editButtonClass,todoListItemToEdit);
+
+         });
+       }
+   };
     
+
+
     
 
  
