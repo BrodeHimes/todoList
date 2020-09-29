@@ -57,6 +57,30 @@
     let clear = document.getElementById('clear');
     let deleteAll = document.getElementById('deleteAll');
     let todoListContainer= document.getElementById('todoListContainer');
+    let todoListItemButtons = "<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form> "
+
+
+//localStorage
+
+  let showCachedList = ()=>{
+     if (window.localStorage.length==0){
+        todoList.innerHTML = "no local storage"
+     } else {
+        noItemsMessage.setAttribute('class', 'hidden');
+        let todoListObject = localStorage.getItem('todoItem');
+        let cachedTodoListItem = document.createElement("LI");
+        cachedTodoListItem.setAttribute('class','todoListItemClass');
+        cachedTodoListItem.innerHTML= todoListObject+todoListItemButtons;
+        todoList.insertAdjacentElement('afterbegin',cachedTodoListItem);
+     }
+  };
+
+  window.addEventListener('load', showCachedList);
+
+
+
+
+
 
 
 //Create Event Handler
@@ -67,6 +91,7 @@
         let todoListItem = document.createElement("LI");
         todoListItem.setAttribute('class','todoListItemClass');
         todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form> ";
+        window.localStorage.setItem('todoItem',itemToAdd);
        
 
         todoList.insertAdjacentElement('afterbegin',todoListItem);
@@ -140,6 +165,7 @@
        }
    };
     
+   
   let deleteButtonClicked = (classToLoop)=>{
     let deleteListItem = function(e){
       e.target.parentNode.parentNode.remove();
@@ -148,28 +174,17 @@
     for(let i=0; i<classToLoop.length;i++){
     classToLoop[i].addEventListener('click',deleteListItem);
     }
-
-
-  }
-
-
-
-
-
-
-
-
-
+  };
 
 
 
 create.addEventListener("click",addTodoItem);
 
 //Clear event handler
-    let clearInput = ()=>{
-        inputBox.value="";
-    }
-    clear.addEventListener("click", clearInput);
+  let clearInput = ()=>{
+   inputBox.value="";
+  }
+  clear.addEventListener("click", clearInput);
 
 //Delete All event handlder
     let deleteAllItems =()=>{
