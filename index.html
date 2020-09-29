@@ -67,7 +67,7 @@
         todoList.innerHTML = ""
      } else {
         noItemsMessage.setAttribute('class', 'hidden');
-        let cachedTodoListArray = JSON.parse(window.localStorage.getItem('todoItems'));
+        let cachedTodoListArray = Object.keys(localStorage);
         console.log(cachedTodoListArray);
         cachedTodoListArray.forEach(item =>{
         let cachedTodoListItem = document.createElement("LI");
@@ -75,7 +75,7 @@
         cachedTodoListItem.innerHTML= item+todoListItemButtons;
         todoList.insertAdjacentElement('afterbegin',cachedTodoListItem);
 
-        //calling edit button event handler
+         //calling edit button event handler
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
         let editButtonClass=document.getElementsByClassName('editClass');
         editButtonClicked(editButtonClass);
@@ -85,9 +85,21 @@
         deleteButtonClicked(deleteButtonClass, item);
 
         }) 
-        
-     }
-  };
+      }
+    };
+
+
+   
+
+
+      
+
+
+
+
+
+
+       
 
   window.addEventListener('load', showCachedList);
 
@@ -108,12 +120,9 @@ let todoListArray = [];
 
 
         //localStorage
-        todoListArray.push(itemToAdd);
-        console.log(todoListArray);
-        window.localStorage.setItem('todoItems',JSON.stringify(todoListArray));
+        window.localStorage.setItem(itemToAdd,itemToAdd)
         
-        
-
+    
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         
         inputBox.value="";
@@ -125,7 +134,7 @@ let todoListArray = [];
 
         //calling delete button event handler
         let deleteButtonClass=document.getElementsByClassName('deleteClass');
-        deleteButtonClicked(deleteButtonClass, itemToAdd);
+        deleteButtonClicked(deleteButtonClass);
         
     };
 
@@ -186,7 +195,7 @@ let todoListArray = [];
    };
     
 //Item Delete event handler
-  let deleteButtonClicked = (classToLoop, todoValue)=>{
+  let deleteButtonClicked = (classToLoop)=>{
     let deleteListItem = function(e){
     //   console.log(todoValue)
     //   console.log(todoListArray);
@@ -194,11 +203,14 @@ let todoListArray = [];
       
 
       e.target.parentNode.parentNode.remove();
+      console.log (e.target.parentNode.parentNode.textContent)
         
+     //remove from local storage   
     let todoValue = e.target.parentNode.parentNode.textContent.replace('EditDelete','');
+    todoValue = todoValue.slice(0,todoValue.length - 1);
+     console.log(todoValue.length);
      console.log(todoValue)
-     console.log(todoListArray.indexOf(todoValue));
-
+    window.localStorage.removeItem(todoValue);
     
 
       
