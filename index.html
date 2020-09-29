@@ -64,14 +64,28 @@
 
   let showCachedList = ()=>{
      if (window.localStorage.length==0){
-        todoList.innerHTML = "no local storage"
+        todoList.innerHTML = ""
      } else {
         noItemsMessage.setAttribute('class', 'hidden');
-        let todoListObject = localStorage.getItem('todoItem');
+        let cachedTodoListArray = JSON.parse(window.localStorage.getItem('todoItems'));
+        console.log(cachedTodoListArray);
+        cachedTodoListArray.forEach(item =>{
         let cachedTodoListItem = document.createElement("LI");
         cachedTodoListItem.setAttribute('class','todoListItemClass');
-        cachedTodoListItem.innerHTML= todoListObject+todoListItemButtons;
+        cachedTodoListItem.innerHTML= item+todoListItemButtons;
         todoList.insertAdjacentElement('afterbegin',cachedTodoListItem);
+
+        //calling edit button event handler
+        let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
+        let editButtonClass=document.getElementsByClassName('editClass');
+        editButtonClicked(editButtonClass);
+
+        //calling delete button event handler
+        let deleteButtonClass=document.getElementsByClassName('deleteClass');
+        deleteButtonClicked(deleteButtonClass, item);
+
+        }) 
+        
      }
   };
 
@@ -79,7 +93,7 @@
 
 
 
-
+let todoListArray = [];
 
 
 
@@ -91,8 +105,14 @@
         let todoListItem = document.createElement("LI");
         todoListItem.setAttribute('class','todoListItemClass');
         todoListItem.innerHTML = itemToAdd+"<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form> ";
-        window.localStorage.setItem('todoItem',itemToAdd);
-       
+
+
+        //localStorage
+        todoListArray.push(itemToAdd);
+        console.log(todoListArray);
+        window.localStorage.setItem('todoItems',JSON.stringify(todoListArray));
+        
+        
 
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         
@@ -105,7 +125,7 @@
 
         //calling delete button event handler
         let deleteButtonClass=document.getElementsByClassName('deleteClass');
-        deleteButtonClicked(deleteButtonClass);
+        deleteButtonClicked(deleteButtonClass, itemToAdd);
         
     };
 
@@ -165,18 +185,31 @@
        }
    };
     
-   
-  let deleteButtonClicked = (classToLoop)=>{
+//Item Delete event handler
+  let deleteButtonClicked = (classToLoop, todoValue)=>{
     let deleteListItem = function(e){
+    //   console.log(todoValue)
+    //   console.log(todoListArray);
+    //   console.log(todoListArray.indexOf(todoValue));
+      
+
       e.target.parentNode.parentNode.remove();
+        
+    let todoValue = e.target.parentNode.parentNode.textContent.replace('EditDelete','');
+     console.log(todoValue)
+     console.log(todoListArray.indexOf(todoValue));
+
+    
+
+      
+    //   console.log(todoListArray);
+     
     };
 
-    for(let i=0; i<classToLoop.length;i++){
+    for(var i=0; i<classToLoop.length;i++){
     classToLoop[i].addEventListener('click',deleteListItem);
     }
   };
-
-
 
 create.addEventListener("click",addTodoItem);
 
@@ -190,6 +223,8 @@ create.addEventListener("click",addTodoItem);
     let deleteAllItems =()=>{
         todoList.innerHTML='';
         noItemsMessage.removeAttribute('class', 'hidden'); 
+        //clear cache
+        window.localStorage.clear();
     }
 
     deleteAll.addEventListener('click',deleteAllItems);
