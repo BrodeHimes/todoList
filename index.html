@@ -140,7 +140,7 @@
         let cachedTodoListArray = Object.values(localStorage);
         console.log(cachedTodoListArray);
 //here we can make function that will show values up to 5 values at a time. 
-
+       
 
         cachedTodoListArray.forEach(item =>{
         let cachedTodoListItem = document.createElement("LI");
@@ -176,7 +176,7 @@ let todoListArray = [];
         todoListItem.innerHTML = itemToAdd+todoListItemButtons;
 
         //localStorage
-        window.localStorage.setItem((Date.now()),itemToAdd)
+        window.localStorage.setItem(itemToAdd,itemToAdd);
         todoList.insertAdjacentElement('afterbegin',todoListItem);
         inputBox.value="";
 
