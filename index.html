@@ -130,18 +130,18 @@
     let todoListContainer= document.getElementById('todoListContainer');
     let todoListItemButtons = "<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form>"
     let pageNumClass = document.getElementsByClassName('pageNum');
-    
 
 //localStorage
-
   let showCachedList = ()=>{
      if (window.localStorage.length==0){
         todoList.innerHTML = ""
      } else {
         noItemsMessage.setAttribute('class', 'hidden');
-        let cachedTodoListArray = Object.keys(localStorage);
-
+        let cachedTodoListArray = Object.values(localStorage);
         console.log(cachedTodoListArray);
+//here we can make function that will show values up to 5 values at a time. 
+
+
         cachedTodoListArray.forEach(item =>{
         let cachedTodoListItem = document.createElement("LI");
         cachedTodoListItem.setAttribute('class','todoListItemClass');
@@ -152,35 +152,20 @@
         let editButtonClass=document.getElementsByClassName('editClass');
         editButtonClicked(editButtonClass);
 
+
         //calling delete button event handler
         let deleteButtonClass=document.getElementsByClassName('deleteClass');
         deleteButtonClicked(deleteButtonClass, item);
-
         }) 
       }
     };
 
-
-   
 //bugs 
 // unable to save 2 todolist items of same value
 // on refresh, items don't stay in same order as they were put in. Seem to be in alphabetical order
-      
-
-
-
-
-
-
-       
-
   window.addEventListener('load', showCachedList);
 
-
-
 let todoListArray = [];
-
-
 
 //Create Event Handler
     let addTodoItem = ()=>{ 
@@ -189,24 +174,18 @@ let todoListArray = [];
         let todoListItem = document.createElement("LI");
         todoListItem.setAttribute('class','todoListItemClass');
         todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-        
 
-    
         //localStorage
-        window.localStorage.setItem(itemToAdd,itemToAdd)
-
-
+        window.localStorage.setItem((Date.now()),itemToAdd)
         todoList.insertAdjacentElement('afterbegin',todoListItem);
-
-
         inputBox.value="";
 
-
         //Paging
-        pagingFunction();
+
+        // finding current items in localStorage aka an array of our values
+        let cachedTodoListArray = Object.values(localStorage);
+        console.log(cachedTodoListArray);
         
-
-
         //calling edit button event handler
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
         let editButtonClass=document.getElementsByClassName('editClass');
@@ -224,39 +203,34 @@ let todoListArray = [];
 
 //PAGING 
 
-  let pagingFunction=()=>{
-    let listItems= document.getElementsByClassName('todoListItemClass');
-    if (todoList.childElementCount > 5){
-        for (let i=5; i<listItems.length; i++) {
-            listItems[i].setAttribute('class','hidden')
-          }
-        pageNumClass[1].removeAttribute('class','hidden')
-        pageNumClass[1].addEventListener('click', goToNewPage(listItems));
+//   let pagingFunction=()=>{
+//     let listItems= document.getElementsByClassName('todoListItemClass');
+//     if (todoList.childElementCount > 5){
+//         for (let i=5; i<listItems.length; i++) {
+//             listItems[i].setAttribute('class','hidden')
+//           }
+//         pageNumClass[1].removeAttribute('class','hidden')
+//         pageNumClass[1].addEventListener('click', goToNewPage(listItems));
 
 
-    
+//     } else if (todoList.childElementCount > 10){
+//         pageNumClass[2].removeAttribute('class','hidden')
 
-    } else if (todoList.childElementCount > 10){
-        pageNumClass[2].removeAttribute('class','hidden')
-       
-        
-    } else if (todoList.childElementcount > 15){
-        pageNumClass[3].removeAttribute('class','hidden')
+//     } else if (todoList.childElementcount > 15){
+//         pageNumClass[3].removeAttribute('class','hidden')
+//     } else {
+//         console.log("less than 6 items");
+//     }
+//    };
 
+// //most recent item made is beginging of HTMLcollection
 
-    } else {
-        console.log("less than 6 items");
-    }
-   };
-
-//most recent item made is begiging of HTMLcollection
-
- let goToNewPage = (classList)=>{
-    for (let i=0; i<5; i++) {
-     console.log(classList[i])
-     classList[i].className='hidden';
-    };
- }
+//  let goToNewPage = (classList)=>{
+//     for (let i=0; i<5; i++) {
+//      console.log(classList[i])
+//      classList[i].className='hidden';
+//     };
+//  }
 
     // for (let i=0; i<4; i++) {
     //         classList[i].setAttribute('class','hidden')
@@ -265,28 +239,6 @@ let todoListArray = [];
     //     classList[i].removeAttribute('class','hidden')
 //     }
 //  };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -318,7 +270,6 @@ let todoListArray = [];
             if (e.keyCode === 13) {
               todoListItemToEdit.outerHTML='<li class="todoListItemClass">'+inputValue+todoListItemButtons;
 
-
             //localStorage
               let ogTodoItemValue=originalTodoItem.replace('<li class="todoListItemClass">','');
               ogTodoItemValue=ogTodoItemValue.replace('<form><button type="button" id="edit" class="editClass">Edit</button><button type="button" id="delete" class="deleteClass">Delete</button></form></li>','');
@@ -335,7 +286,6 @@ let todoListArray = [];
 
               } else if (e.keyCode===27){
                 todoListItemToEdit.innerHTML=originalTodoItem;
-                
 
                 let editButtonClass=document.getElementsByClassName('editClass');
                 editButtonClicked(editButtonClass,todoListItemToEdit);
@@ -367,15 +317,11 @@ let todoListArray = [];
         
      //remove from local storage   
     let todoValue = e.target.parentNode.parentNode.textContent.replace('EditDelete','');
+    
     // todoValue = todoValue.slice(0,todoValue.length - 1);
      console.log(todoValue.length);
      console.log(todoValue)
     window.localStorage.removeItem(todoValue);
-    
-
-      
-
-     
     };
 
     for(var i=0; i<classToLoop.length;i++){
