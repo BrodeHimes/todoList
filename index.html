@@ -131,22 +131,53 @@
     let todoListItemButtons = "<form><button type='button' id='edit' class='editClass'>Edit</button><button type='button'id='delete' class='deleteClass'>Delete</button></form>"
     let pageNumClass = document.getElementsByClassName('pageNum');
 
+
+
+
+    let cachedTodoListArray = Object.values(localStorage);
+    let firstPage = cachedTodoListArray.filter(function(value,index,arr){ return index < 5;
+    });            
+    let secondPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 4 && index <10;
+    });
+    let thirdPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 9 && index < 11;
+    });
+
+
+
+
+
+
+
+
+
 //localStorage
   let showCachedList = ()=>{
-    let cachedTodoListArray = Object.values(localStorage);
-    let firstPage = cachedTodoListArray.filter(function(value,index,arr){                     return index < 5;
-    });            
-    let secondPage = cachedTodoListArray.filter(function(value,index,arr){                     return index > 4;
-    });
+    
+    
+    let displayPage1=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(firstPage);
+    }
+
+    let displayPage2=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(secondPage);
+    } 
+    let displayPage3=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(thirdPage);
+    }
     
     
      if (window.localStorage.length==0){
         todoList.innerHTML = "";
-        //here we can make function that will show values up to 5 values at a time. lets turn this into its own function later that we can call on Create button. So that it checks for how many list items there are each time based of what is in localStorage. 
+         
+
+
+
      } else if (window.localStorage.length < 6) {
         noItemsMessage.setAttribute('class', 'hidden');
         console.log('5 or less items')
-    
         createListItemNode(cachedTodoListArray);
 
 
@@ -154,39 +185,41 @@
         noItemsMessage.setAttribute('class', 'hidden');          
         console.log("more than 5 items")
         
-
-        console.log(firstPage);
-        console.log(secondPage);
         createListItemNode(firstPage);
         pageNumClass[0].className='pageNum';
         pageNumClass[1].className='pageNum';
         console.log(pageNumClass);
 
-
-
-        let displayPage2=()=>{
-             removeListItemNode();
-            createListItemNode(secondPage);
-            } 
-        
-
         
         pageNumClass[1].addEventListener('click',displayPage2);
+        pageNumClass[0].addEventListener('click',displayPage1);
+        
 
 
 
 
 
-     } else if (window.localStorage.length > 10 && window.localStorage.length < 16){
+     } else if (window.localStorage.length > 9 && window.localStorage.length < 16){
         noItemsMessage.setAttribute('class', 'hidden'); 
         console.log("more than 10 items");
         
+        createListItemNode(firstPage)
+
+
+
         pageNumClass[0].className='pageNum';
         pageNumClass[1].className='pageNum';
         pageNumClass[2].className='pageNum';
 
 
+        pageNumClass[1].addEventListener('click',displayPage2);
+        pageNumClass[0].addEventListener('click',displayPage1);
+        pageNumClass[2].addEventListener('click',displayPage3);
 
+
+     } else if (window.localStorage.length > 15){
+        noItemsMessage.setAttribute('class', 'hidden');
+         console.log('more than 15 items')
      }
  
     };
@@ -212,7 +245,7 @@
   }; 
 
 
-  let removeListItemNode = () =>{
+  let clearTodoInnerHTML = () =>{
 
       todoList.innerHTML='';
     };
@@ -252,7 +285,7 @@ let todoListArray = [];
 
         // finding current items in localStorage aka an array of our values
         let cachedTodoListArray = Object.values(localStorage);
-        
+        showCachedList();
         
         //calling edit button event handler
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
