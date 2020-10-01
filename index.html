@@ -101,8 +101,8 @@
     <section id="todoListContainer">
         <p id="noItems">You don't have any todo items</p> 
         <ul id="todoList"></ul>
-        <a class="pageNum" id="pageNum1">1</a>
-        <a class="pageNum hidden" id="pageNum2">2</a>
+        <button class="pageNum hidden" id="pageNum1">1</button>
+        <button class="pageNum hidden" id="pageNum2">2</button>
         <a class="pageNum hidden" id="pageNum3">3</a>
         <a class="pageNum hidden" id="pageNum4">4</a>
         <a class="pageNum hidden" id="pageNum5">5</a>
@@ -133,32 +133,100 @@
 
 //localStorage
   let showCachedList = ()=>{
+    let cachedTodoListArray = Object.values(localStorage);
+    let firstPage = cachedTodoListArray.filter(function(value,index,arr){                     return index < 5;
+    });            
+    let secondPage = cachedTodoListArray.filter(function(value,index,arr){                     return index > 4;
+    });
+    
+    
      if (window.localStorage.length==0){
-        todoList.innerHTML = ""
-     } else {
+        todoList.innerHTML = "";
+        //here we can make function that will show values up to 5 values at a time. lets turn this into its own function later that we can call on Create button. So that it checks for how many list items there are each time based of what is in localStorage. 
+     } else if (window.localStorage.length < 6) {
         noItemsMessage.setAttribute('class', 'hidden');
-        let cachedTodoListArray = Object.values(localStorage);
-        console.log(cachedTodoListArray);
-//here we can make function that will show values up to 5 values at a time. 
-       
+        console.log('5 or less items')
+    
+        createListItemNode(cachedTodoListArray);
 
-        cachedTodoListArray.forEach(item =>{
-        let cachedTodoListItem = document.createElement("LI");
-        cachedTodoListItem.setAttribute('class','todoListItemClass');
-        cachedTodoListItem.innerHTML= item+todoListItemButtons;
-        todoList.insertAdjacentElement('afterbegin',cachedTodoListItem);
 
-         //calling edit button event handler
-        let editButtonClass=document.getElementsByClassName('editClass');
-        editButtonClicked(editButtonClass);
+     } else if (window.localStorage.length > 5 && window.localStorage.length < 11){
+        noItemsMessage.setAttribute('class', 'hidden');          
+        console.log("more than 5 items")
+        
 
+        console.log(firstPage);
+        console.log(secondPage);
+        createListItemNode(firstPage);
+        pageNumClass[0].className='pageNum';
+        pageNumClass[1].className='pageNum';
+        console.log(pageNumClass);
+
+
+
+        let displayPage2=()=>{
+             removeListItemNode();
+            createListItemNode(secondPage);
+            } 
+        
+
+        
+        pageNumClass[1].addEventListener('click',displayPage2);
+
+
+
+
+
+     } else if (window.localStorage.length > 10 && window.localStorage.length < 16){
+        noItemsMessage.setAttribute('class', 'hidden'); 
+        console.log("more than 10 items");
+        
+        pageNumClass[0].className='pageNum';
+        pageNumClass[1].className='pageNum';
+        pageNumClass[2].className='pageNum';
+
+
+
+     }
+ 
+    };
+
+
+
+  let createListItemNode = (array) =>{
+          array.forEach(item =>{
+            let cachedTodoListItem = document.createElement("LI");
+            cachedTodoListItem.setAttribute('class','todoListItemClass');
+            cachedTodoListItem.dataset.value = item;
+            cachedTodoListItem.innerHTML= item+todoListItemButtons;
+            todoList.insertAdjacentElement('afterbegin',cachedTodoListItem);
+
+          //calling edit button event handler
+            let editButtonClass=document.getElementsByClassName('editClass');
+            editButtonClicked(editButtonClass);
 
         //calling delete button event handler
-        let deleteButtonClass=document.getElementsByClassName('deleteClass');
-        deleteButtonClicked(deleteButtonClass, item);
-        }) 
-      }
+            let deleteButtonClass=document.getElementsByClassName('deleteClass');
+            deleteButtonClicked(deleteButtonClass, item);
+          });
+  }; 
+
+
+  let removeListItemNode = () =>{
+
+      todoList.innerHTML='';
     };
+ 
+ 
+  
+    
+
+
+
+
+
+
+
 
 //bugs 
 // unable to save 2 todolist items of same value
@@ -184,7 +252,7 @@ let todoListArray = [];
 
         // finding current items in localStorage aka an array of our values
         let cachedTodoListArray = Object.values(localStorage);
-        console.log(cachedTodoListArray);
+        
         
         //calling edit button event handler
         let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
