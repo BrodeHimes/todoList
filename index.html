@@ -136,8 +136,27 @@
 
 
 
+    let storedList= localStorage.getItem('items');
+    let cachedTodoListArray = JSON.parse(storedList);
+     
+    //store from lowest to highest time stamp. So oldest are first. 
 
-    let cachedTodoListArray = Object.values(localStorage);
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     let firstPage = cachedTodoListArray.filter(function(value,index,arr){ return index < 5;
     });            
@@ -161,6 +180,8 @@
       createListItemNode(thirdPage);
     }
 
+
+ 
 
 
 
@@ -248,17 +269,6 @@
  
   
     
-
-
-
-
-
-
-
-
-//bugs 
-// unable to save 2 todolist items of same value
-// on refresh, items don't stay in same order as they were put in. Seem to be in alphabetical order
   window.addEventListener('load', showCachedList);
 
 let todoListArray = [];
@@ -266,9 +276,18 @@ let todoListArray = [];
 //Create Event Handler
     let addTodoItem = ()=>{ 
         noItemsMessage.setAttribute('class', 'hidden');
-        createListItem(inputBox);
-        //Paging
+        clearTodoInnerHTML();
+        let itemToAdd = inputBox.value;
+        let alreadyStoredList = JSON.parse(storedList);
+         alreadyStoredList.push(itemToAdd)
+    
+        console.log(alreadyStoredList);
 
+        window.localStorage.setItem('items',JSON.stringify(alreadyStoredList));
+        console.log(JSON.stringify(alreadyStoredList))
+
+
+        createListItem(todoListArray);
         // finding current items in localStorage aka an array of our values
         let cachedTodoListArray = Object.values(localStorage);
         
@@ -286,73 +305,18 @@ let todoListArray = [];
 
 
 
-
-
-// paging on create/delete
-
-// let checkTodoListLength = ()=>{
-//     noItemsMessage.setAttribute('class', 'hidden');
-//     if (cachedTodoListArray<5){
-//         let itemToAdd = inputBox.value;
-//         let todoListItem = document.createElement("LI");
-//         todoListItem.setAttribute('class','todoListItemClass');
-//         todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-        
-//     }
-
-//  };
-
-let createListItem = (input)=>{
-    let itemToAdd = input.value;
+let createListItem = (array)=>{
+    array.forEach(item => {
+    console.log(item);
+    let itemToAdd = item;
     let todoListItem = document.createElement("LI");
     todoListItem.setAttribute('class','todoListItemClass');
     todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-    window.localStorage.setItem(itemToAdd,itemToAdd);
     todoList.insertAdjacentElement('afterbegin',todoListItem);
     inputBox.value="";
-
+    });
 }
 
-
-
-//PAGING 
-
-//   let pagingFunction=()=>{
-//     let listItems= document.getElementsByClassName('todoListItemClass');
-//     if (todoList.childElementCount > 5){
-//         for (let i=5; i<listItems.length; i++) {
-//             listItems[i].setAttribute('class','hidden')
-//           }
-//         pageNumClass[1].removeAttribute('class','hidden')
-//         pageNumClass[1].addEventListener('click', goToNewPage(listItems));
-
-
-//     } else if (todoList.childElementCount > 10){
-//         pageNumClass[2].removeAttribute('class','hidden')
-
-//     } else if (todoList.childElementcount > 15){
-//         pageNumClass[3].removeAttribute('class','hidden')
-//     } else {
-//         console.log("less than 6 items");
-//     }
-//    };
-
-// //most recent item made is beginging of HTMLcollection
-
-//  let goToNewPage = (classList)=>{
-//     for (let i=0; i<5; i++) {
-//      console.log(classList[i])
-//      classList[i].className='hidden';
-//     };
-//  }
-
-    // for (let i=0; i<4; i++) {
-    //         classList[i].setAttribute('class','hidden')
-    //       };
-    // for(let i=5; i<classList.length; i++) {
-    //     classList[i].removeAttribute('class','hidden')
-//     }
-//  };
 
 
 
