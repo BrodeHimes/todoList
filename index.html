@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-  <title> Todo List</title>
+  <title>Todo List</title>
   <style>
       body {
           display:flex ;
@@ -18,79 +17,16 @@
       .hidden {
           display:none;
       }
-
-      #edit{
-
-      }
-
       .inputBoxClass{
           width: 100%;
       }
-
-       
-  .pagination {
-    max-width: 400px;
-    min-width: 300px;
-    width: 100%;
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    background-color: lightgreen;
-    padding: 20px;
-  }
-  .pagination .tableList {
-      min-height: 250px;
-      text-indent: 20px;
-  }
-  .tableList .objectBlock {
-      position: relative;
-      background-color: black;
-      color: white;
-      padding: 10px;
-      margin-bottom: 10px;
-  }
-  .pageButton {
-      border: 1px solid black;
-      padding: 5px;
-  }
-  .clickPageNumber {
-      background-color: lightgrey;
-      padding: 5px;
-      margin-left: 2px;
-      margin-right: 2px;
-  }
-  .pagination-block {
-    text-align: center;
-    width: 100%;
-  }
-  .pagination-block span {
-    display: inline-block;
-  }
-  .pagination-block .pageButton {
-    background-color: grey;
-    color: white;
-  }
-  .pagination-block span:hover {
-    cursor: pointer;
-  }
-  .opacity {
-    opacity: 0.5;
-  }
-  .outline-none {
-    outline: none;
-    user-select: none; 
-  }
-}
-
-  </style>
+</style>
 </head>
-
 <body>
-<header> 
+ <header> 
     <h1> My Todo List</h1>
-</header>
-
-<main> 
+ </header>
+ <main> 
     <form> 
         <label for="inputBox" ></label>
         <input type="text" id="inputBox" name="inputBox" autocomplete="off">
@@ -101,26 +37,20 @@
     <section id="todoListContainer">
         <p id="noItems">You don't have any todo items</p> 
         <ul id="todoList"></ul>
-        <button class="pageNum hidden" id="pageNum1">1</button>
-        <button class="pageNum hidden" id="pageNum2">2</button>
         <nav class="pageNumContainer">
-          <a class="pageNum hidden" id="pageNum3">3</a>
-          <a class="pageNum hidden" id="pageNum4">4</a>
-          <a class="pageNum hidden" id="pageNum5">5</a>
-          <a class="pageNum hidden" id="pageNum6">6</a>
-          <a class="pageNum hidden" id="pageNum7">7</a>
-          <a class="pageNum hidden" id="pageNum8">8</a>
-          <a class="pageNum hidden" id="pageNum9">9</a>
-          <a class="pageNum hidden" id="pageNum10">10</a>
+          <button class="pageNum hidden" id="pageNum1">1</button>
+          <button class="pageNum hidden" id="pageNum2">2</button>
+          <button class="pageNum hidden" id="pageNum3">3</button>
+          <button class="pageNum hidden" id="pageNum4">4</button>
+          <button class="pageNum hidden" id="pageNum5">5</button>
+          <button class="pageNum hidden" id="pageNum6">6</button>
+          <button class="pageNum hidden" id="pageNum7">7</button>
+          <button class="pageNum hidden" id="pageNum8">8</button>
+          <button class="pageNum hidden" id="pageNum9">9</button>
+          <button class="pageNum hidden" id="pageNum10">10</button>
         </nav>
     </section>
-    
-
-
- 
-   
-
-</main>
+ </main>
 
 <script>
     let inputBox = document.getElementById("inputBox");
@@ -134,19 +64,22 @@
     let pageNumClass = document.getElementsByClassName('pageNum');
     let pageNumContainer = document.getElementsByClassName('pageNumContainer');
 
-
-
-
+//For paging from localStorage. Only works on window refresh
     let cachedTodoListArray = Object.values(localStorage);
 
     let firstPage = cachedTodoListArray.filter(function(value,index,arr){ return index < 5;
     });            
     let secondPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 4 && index <10;
     });
-    let thirdPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 9 && index < 11;
+    let thirdPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 9 && index < 15;
     });
-
-
+    let fourthPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 15 && index < 21;
+    });
+    let fifthPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 20 && index < 26;
+    });
+    let sixthPage = cachedTodoListArray.filter(function(value,index,arr){ return index > 25 && index < 31;
+    });
+    
     let displayPage1=()=>{
       clearTodoInnerHTML();
       createListItemNode(firstPage);
@@ -161,47 +94,45 @@
       createListItemNode(thirdPage);
     }
 
+    let displayPage4=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(fourthPage);
+    }
 
+    let displayPage5=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(fifthPage);
+    }
 
+    let displayPage6=()=>{
+      clearTodoInnerHTML();
+      createListItemNode(sixthPage);
+    }
 
-
-
-
-//localStorage
+//Function to page items based off localStorage length
   let showCachedList = ()=>{
      if (window.localStorage.length==0){
         todoList.innerHTML = "";
      } else if (window.localStorage.length < 6) {
         noItemsMessage.setAttribute('class', 'hidden');
-        console.log('5 or less items')
         createListItemNode(cachedTodoListArray);
 
 
      } else if (window.localStorage.length > 5 && window.localStorage.length < 11){
         noItemsMessage.setAttribute('class', 'hidden');          
-        console.log("more than 5 items")
+ 
         
         createListItemNode(firstPage);
         pageNumClass[0].className='pageNum';
         pageNumClass[1].className='pageNum';
-        console.log(pageNumClass);
+ 
 
-        
         pageNumClass[1].addEventListener('click',displayPage2);
         pageNumClass[0].addEventListener('click',displayPage1);
-        
-       
-
-
-
      } else if (window.localStorage.length > 9 && window.localStorage.length < 16){
-        noItemsMessage.setAttribute('class', 'hidden'); 
-        console.log("more than 10 items");
-        
+        noItemsMessage.setAttribute('class', 'hidden');    
         createListItemNode(firstPage)
-
-
-
+ 
         pageNumClass[0].className='pageNum';
         pageNumClass[1].className='pageNum';
         pageNumClass[2].className='pageNum';
@@ -214,13 +145,25 @@
 
      } else if (window.localStorage.length > 15){
         noItemsMessage.setAttribute('class', 'hidden');
+        createListItemNode(firstPage);
+
+        pageNumClass[0].className='pageNum';
+        pageNumClass[1].className='pageNum';
+        pageNumClass[2].className='pageNum';
+        pageNumClass[3].className='pageNum';
+
+        pageNumClass[1].addEventListener('click',displayPage2);
+        pageNumClass[0].addEventListener('click',displayPage1);
+        pageNumClass[2].addEventListener('click',displayPage3);
+        pageNumClass[3].addEventListener('click',displayPage4);
+
          console.log('more than 15 items')
      }
  
     };
 
 
-
+//function to create list items from localStorage
   let createListItemNode = (array) =>{
           array.forEach(item =>{
             let cachedTodoListItem = document.createElement("LI");
@@ -239,42 +182,30 @@
           });
   }; 
 
-
   let clearTodoInnerHTML = () =>{
-
       todoList.innerHTML='';
     };
  
- 
+    window.addEventListener('load', showCachedList);
   
-    
-
-
-
-
-
-
-
-
-//bugs 
-// unable to save 2 todolist items of same value
-// on refresh, items don't stay in same order as they were put in. Seem to be in alphabetical order
-  window.addEventListener('load', showCachedList);
-
 let todoListArray = [];
 
-//Create Event Handler
+//Create Button Event Handler
     let addTodoItem = ()=>{ 
         noItemsMessage.setAttribute('class', 'hidden');
-        createListItem(inputBox);
-        //Paging
+         
+        let itemToAdd = inputBox.value;
+        let todoListItem = document.createElement("LI");
+        todoListItem.setAttribute('class','todoListItemClass');
+        todoListItem.innerHTML = itemToAdd+todoListItemButtons;
 
-        // finding current items in localStorage aka an array of our values
-        let cachedTodoListArray = Object.values(localStorage);
-        
+        window.localStorage.setItem(itemToAdd,itemToAdd);
+        todoList.insertAdjacentElement('afterbegin',todoListItem);
+        inputBox.value="";
+
+        checkListItems(todoList); 
         
         //calling edit button event handler
-        let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
         let editButtonClass=document.getElementsByClassName('editClass');
         editButtonClicked(editButtonClass);
 
@@ -284,76 +215,22 @@ let todoListArray = [];
         
     };
 
+// this was going to be used for paging based off how many child elements the list container had
+let checkListItems = (container)=>{
+  console.log(container.childElementCount)
 
+  if (container.childElementCount > 5){
+    console.log("more than five items. Refresh screen to start paging")
+    // container.removeChild(container.lastChild);
+    // let pageNumClass= document.getElementsByClassName('pageNum');
 
+    // pageNumClass[0].className='pageNum';
+    // pageNumClass[1].className='pageNum';
 
-
-// paging on create/delete
-
-// let checkTodoListLength = ()=>{
-//     noItemsMessage.setAttribute('class', 'hidden');
-//     if (cachedTodoListArray<5){
-//         let itemToAdd = inputBox.value;
-//         let todoListItem = document.createElement("LI");
-//         todoListItem.setAttribute('class','todoListItemClass');
-//         todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-        
-//     }
-
-//  };
-
-let createListItem = (input)=>{
-    let itemToAdd = input.value;
-    let todoListItem = document.createElement("LI");
-    todoListItem.setAttribute('class','todoListItemClass');
-    todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-    window.localStorage.setItem(itemToAdd,itemToAdd);
-    todoList.insertAdjacentElement('afterbegin',todoListItem);
-    inputBox.value="";
-
+    // pageNumClass[1].addEventListener('click',displayPage2);
+    // pageNumClass[0].addEventListener('click',displayPage1);
+  }  
 }
-
-
-
-//PAGING 
-
-//   let pagingFunction=()=>{
-//     let listItems= document.getElementsByClassName('todoListItemClass');
-//     if (todoList.childElementCount > 5){
-//         for (let i=5; i<listItems.length; i++) {
-//             listItems[i].setAttribute('class','hidden')
-//           }
-//         pageNumClass[1].removeAttribute('class','hidden')
-//         pageNumClass[1].addEventListener('click', goToNewPage(listItems));
-
-
-//     } else if (todoList.childElementCount > 10){
-//         pageNumClass[2].removeAttribute('class','hidden')
-
-//     } else if (todoList.childElementcount > 15){
-//         pageNumClass[3].removeAttribute('class','hidden')
-//     } else {
-//         console.log("less than 6 items");
-//     }
-//    };
-
-// //most recent item made is beginging of HTMLcollection
-
-//  let goToNewPage = (classList)=>{
-//     for (let i=0; i<5; i++) {
-//      console.log(classList[i])
-//      classList[i].className='hidden';
-//     };
-//  }
-
-    // for (let i=0; i<4; i++) {
-    //         classList[i].setAttribute('class','hidden')
-    //       };
-    // for(let i=5; i<classList.length; i++) {
-    //     classList[i].removeAttribute('class','hidden')
-//     }
-//  };
-
 
 
 //Edit Button Event handler
@@ -421,20 +298,10 @@ let createListItem = (input)=>{
 //Item Delete event handler
   let deleteButtonClicked = (classToLoop)=>{
     let deleteListItem = function(e){
-    //   console.log(todoValue)
-    //   console.log(todoListArray);
-    //   console.log(todoListArray.indexOf(todoValue));
-      
-
       e.target.parentNode.parentNode.remove();
-      console.log (e.target.parentNode.parentNode.textContent)
-        
+
      //remove from local storage   
     let todoValue = e.target.parentNode.parentNode.textContent.replace('EditDelete','');
-    
-    // todoValue = todoValue.slice(0,todoValue.length - 1);
-     console.log(todoValue.length);
-     console.log(todoValue)
     window.localStorage.removeItem(todoValue);
     };
 
@@ -455,14 +322,11 @@ create.addEventListener("click",addTodoItem);
     let deleteAllItems =()=>{
         todoList.innerHTML='';
         noItemsMessage.removeAttribute('class', 'hidden'); 
+        pageNumContainer[0].innerHTML='';
         //clear cache
-        window.localStorage.clear();
+        window.localStorage.clear();        
     }
-
     deleteAll.addEventListener('click',deleteAllItems);
-
 </script>
-  
 </body>
-
 </html>
