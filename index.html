@@ -247,71 +247,73 @@
  
  
   
-    
-
-
-
-
-
-
-
-
-//bugs 
-// unable to save 2 todolist items of same value
-// on refresh, items don't stay in same order as they were put in. Seem to be in alphabetical order
   window.addEventListener('load', showCachedList);
 
 let todoListArray = [];
+console.log(todoListArray)
 
 //Create Event Handler
     let addTodoItem = ()=>{ 
         noItemsMessage.setAttribute('class', 'hidden');
-        createListItem(inputBox);
-        //Paging
-
-        // finding current items in localStorage aka an array of our values
-        let cachedTodoListArray = Object.values(localStorage);
-        
-        
-        //calling edit button event handler
-        let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
-        let editButtonClass=document.getElementsByClassName('editClass');
-        editButtonClicked(editButtonClass);
-
-        //calling delete button event handler
-        let deleteButtonClass=document.getElementsByClassName('deleteClass');
-        deleteButtonClicked(deleteButtonClass);
-        
+        clearTodoInnerHTML();
+        let inputValue = inputBox.value        
+        window.localStorage.setItem(inputValue,inputValue);
+    
+        let localStoArray = Object.values(localStorage);
+        createListFromArray(localStoArray);
+ 
     };
 
 
 
 
 
-// paging on create/delete
 
-// let checkTodoListLength = ()=>{
-//     noItemsMessage.setAttribute('class', 'hidden');
-//     if (cachedTodoListArray<5){
-//         let itemToAdd = inputBox.value;
-//         let todoListItem = document.createElement("LI");
-//         todoListItem.setAttribute('class','todoListItemClass');
-//         todoListItem.innerHTML = itemToAdd+todoListItemButtons;
-        
-//     }
 
-//  };
+// USE THIS THIS IS GOOD CREATE FUNCTION
+// let createListItem = (input)=>{
+//     let itemToAdd = input.value;
+//     let todoListItem = document.createElement("LI");
+//     todoListItem.setAttribute('class','todoListItemClass');
+//     todoListItem.innerHTML = itemToAdd+todoListItemButtons;
+//     window.localStorage.setItem(itemToAdd,itemToAdd);
+//     todoList.insertAdjacentElement('afterbegin',todoListItem);
+//     inputBox.value="";
 
-let createListItem = (input)=>{
-    let itemToAdd = input.value;
+// }
+
+
+let createListFromArray = (array)=> {
+  if (array.length < 6) {
+    array.forEach(item => {
+    let itemToAdd = item;
     let todoListItem = document.createElement("LI");
     todoListItem.setAttribute('class','todoListItemClass');
     todoListItem.innerHTML = itemToAdd+todoListItemButtons;
     window.localStorage.setItem(itemToAdd,itemToAdd);
     todoList.insertAdjacentElement('afterbegin',todoListItem);
     inputBox.value="";
+    console.log('todoListItem');
 
-}
+    //calling edit button event handler
+    let todoListItemClass=document.querySelectorAll("li.todoListItemClass");
+    let editButtonClass=document.getElementsByClassName('editClass');
+        editButtonClicked(editButtonClass);
+
+    //calling delete button event handler
+    let deleteButtonClass=document.getElementsByClassName('deleteClass');
+    deleteButtonClicked(deleteButtonClass);
+    
+
+    } else if (array.length > 5) {
+        for(i=0; i < 5;i++ ){
+            console.log(array[i]);
+
+        }
+
+    }
+  }
+};
 
 
 
